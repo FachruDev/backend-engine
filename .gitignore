@@ -26,6 +26,6 @@ secrets.toml
 *.swo
 .DS_Store
 
-# Databases (if using local SQLite for development)
+# Databases
 *.sqlite3
 *.db
