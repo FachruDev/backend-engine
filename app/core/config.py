@@ -29,6 +29,7 @@ class Settings(BaseSettings):
 
     jwt_secret: str = Field(default="change-me-in-local-env", alias="JWT_SECRET")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(default=60, alias="ACCESS_TOKEN_EXPIRE_MINUTES")
 
     ai_provider: str = Field(default="joinbareng", alias="AI_PROVIDER")
     ai_base_url: str = Field(default="", alias="AI_BASE_URL")
@@ -48,6 +49,16 @@ class Settings(BaseSettings):
     def default_database_url_when_blank(cls, value: str | None) -> str:
         if value is None or str(value).strip() == "":
             return "postgresql+psycopg://scheduler:scheduler@localhost:5432/ai_scheduler"
+        value = str(value)
+        if value.startswith("postgresql://"):
+            return value.replace("postgresql://", "postgresql+psycopg://", 1)
+        return value
+
+    @field_validator("jwt_secret", mode="before")
+    @classmethod
+    def default_jwt_secret_when_blank(cls, value: str | None) -> str:
+        if value is None or str(value).strip() == "":
+            return "change-me-in-local-env"
         return str(value)
 
     @computed_field

@@ -2,6 +2,9 @@ from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
+from app.modules.auth.router import router as auth_router
+from app.modules.users.router import router as users_router
+from app.modules.workspace.router import router as workspace_router
 
 
 settings = get_settings()
@@ -43,5 +46,9 @@ api_router = APIRouter()
 def api_health_check() -> dict[str, str]:
     return {"status": "healthy"}
 
+
+api_router.include_router(auth_router)
+api_router.include_router(users_router)
+api_router.include_router(workspace_router)
 
 app.include_router(api_router, prefix=settings.app_api_prefix)

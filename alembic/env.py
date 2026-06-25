@@ -5,6 +5,10 @@ from sqlalchemy import engine_from_config, pool
 
 from app.core.config import get_settings
 from app.db.base import Base
+from app.modules.users import model as users_model
+from app.modules.workspace import model as workspace_model
+
+_ = (users_model, workspace_model)
 
 config = context.config
 
